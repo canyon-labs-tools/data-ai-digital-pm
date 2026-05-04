@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Canyon Labs — Data, AI & Digital · Project Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* === Canyon Labs brand tokens (inlined from canyon-labs-brand skill) === */
+:root {
+  --blue-darkest:#191B4D; --blue-dark:#272E72; --blue-core:#2E4284; --blue-light:#3B5FBF;
+  --purple-darkest:#2A0A2C; --purple-dark:#5F295E;
+  --red-darkest:#5A0F1E; --red-dark:#9D2235; --red-core:#B73142; --red-light:#D14B58;
+  --orange-dark:#A8331C; --orange:#D14124;
+  --black-80:#191919; --ink:#1A1D2E;
+  --slate-900:#1E293B; --slate-700:#334155; --slate-500:#64748B; --slate-400:#94A3B8;
+  --slate-300:#CBD5E1; --slate-200:#E2E8F0; --slate-100:#F1F5F9; --slate-50:#F8FAFC;
+  --white:#FFFFFF;
+  --brand-gradient:linear-gradient(90deg,#272E72 0%,#5F295E 35%,#9D2235 70%,#D14124 100%);
+  --brand-gradient-diagonal:linear-gradient(135deg,#272E72 0%,#5F295E 40%,#9D2235 75%,#D14124 100%);
+  --brand-gradient-backdrop:linear-gradient(120deg,#272E72 0%,#3B2E6E 25%,#5F295E 50%,#7F2648 75%,#9D2235 100%);
+  --status-success:#10B981; --status-warning:#F59E0B; --status-danger:#EF4444; --status-info:#3B5FBF;
+  --font-display:"Titillium Web","Helvetica Neue",Arial,sans-serif;
+  --font-body:"PT Sans","Helvetica Neue",Arial,sans-serif;
+  --shadow-card:0 12px 28px rgba(39,46,114,0.18);
+  --shadow-button:0 12px 28px rgba(157,34,53,0.28);
+  --peak-clip:polygon(0 0,100% 0,100% 90%,50% 100%,0 90%);
+  --peak-clip-up:polygon(0 12%,50% 0,100% 12%,100% 100%,0 100%);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--slate-50);color:var(--black-80);font-family:var(--font-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* === Header === */
+.cl-header{background:var(--brand-gradient-backdrop);color:#fff;padding:36px 48px 96px;position:relative;clip-path:var(--peak-clip);overflow:hidden}
+.cl-header::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 50%,rgba(255,255,255,0.06),transparent 55%);pointer-events:none}
+.cl-header-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:32px;position:relative;z-index:1}
+.cl-header-text{flex:1;min-width:0}
+.cl-eyebrow{font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:#fff;opacity:0.85;margin-bottom:14px}
+.cl-title{font-family:var(--font-display);font-weight:700;font-size:48px;line-height:1.0;letter-spacing:0.04em;text-transform:uppercase;color:#fff;margin:0 0 12px;text-shadow:0 4px 30px rgba(0,0,0,0.25)}
+.cl-subtitle{font-family:var(--font-body);font-size:18px;line-height:1.45;color:#fff;opacity:0.92;max-width:60ch;margin:0}
+.cl-mark{height:64px;width:auto;flex-shrink:0;opacity:0.95}
+
+/* === Toolbar === */
+.cl-toolbar{max-width:1280px;margin:-72px auto 32px;padding:0 48px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;position:relative;z-index:2}
+.cl-btn{font-family:var(--font-display);font-weight:700;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;border:0;border-radius:8px;padding:12px 20px;cursor:pointer;transition:transform 120ms ease,box-shadow 120ms ease}
+.cl-btn:hover{transform:translateY(-1px)}
+.cl-btn-primary{background:var(--red-dark);color:#fff;box-shadow:var(--shadow-button)}
+.cl-btn-primary:hover{background:var(--red-core)}
+.cl-btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--slate-300);box-shadow:0 2px 6px rgba(25,27,77,0.06)}
+.cl-btn-ghost:hover{border-color:var(--slate-500)}
+.cl-toolbar-spacer{flex:1}
+.cl-meeting-meta{font-size:13px;color:var(--slate-500)}
+.cl-meeting-meta strong{color:var(--ink);font-weight:700}
+
+/* === Main === */
+main{max-width:1280px;margin:0 auto;padding:0 48px 80px}
+.cl-section{background:#fff;border-radius:16px;padding:32px 36px;margin-bottom:28px;box-shadow:var(--shadow-card)}
+.cl-section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.cl-section-eyebrow{font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--red-dark);margin-bottom:4px}
+.cl-section-title{font-family:var(--font-display);font-weight:700;font-size:26px;line-height:1.1;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink);margin:0}
+.cl-section-sub{font-size:14px;color:var(--slate-500);margin-top:6px;max-width:60ch}
+
+/* === Priority list === */
+.cl-priority-row{display:grid;grid-template-columns:48px 1fr 130px 110px 90px 36px;gap:16px;align-items:center;padding:14px 16px;border-radius:10px;background:var(--slate-50);margin-bottom:8px;transition:background 120ms ease}
+.cl-priority-row:hover{background:#fff;box-shadow:0 2px 8px rgba(25,27,77,0.08)}
+.cl-priority-rank{font-family:var(--font-display);font-weight:900;font-size:28px;color:var(--blue-dark);text-align:center;line-height:1;cursor:grab;user-select:none}
+.cl-priority-rank:active{cursor:grabbing}
+.cl-priority-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cl-priority-name{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--ink);outline:none;border-radius:4px;padding:2px 4px;margin-left:-4px}
+.cl-priority-name:focus,.cl-priority-name:hover{background:#fff}
+.cl-priority-desc{font-size:13px;color:var(--slate-500);outline:none;border-radius:4px;padding:2px 4px;margin-left:-4px;line-height:1.4}
+.cl-priority-desc:focus,.cl-priority-desc:hover{background:#fff}
+.cl-priority-desc:empty::before{content:attr(data-placeholder);color:var(--slate-400);font-style:italic}
+.cl-status-select,.cl-owner-input,.cl-progress-input{font-family:var(--font-body);font-size:13px;border:1px solid var(--slate-200);border-radius:6px;padding:6px 8px;background:#fff;color:var(--ink);width:100%}
+.cl-progress-input{text-align:center}
+.cl-status-select[data-status="on-track"]{background:#ECFDF5;border-color:#A7F3D0;color:#065F46}
+.cl-status-select[data-status="at-risk"]{background:#FFFBEB;border-color:#FCD34D;color:#92400E}
+.cl-status-select[data-status="blocked"]{background:#FEF2F2;border-color:#FECACA;color:#991B1B}
+.cl-status-select[data-status="done"]{background:#EFF6FF;border-color:#BFDBFE;color:#1E40AF}
+.cl-status-select[data-status="planned"]{background:var(--slate-100);border-color:var(--slate-200);color:var(--slate-700)}
+.cl-delete{background:transparent;border:0;color:var(--slate-400);cursor:pointer;font-size:18px;line-height:1;padding:6px;border-radius:4px;transition:color 120ms ease,background 120ms ease}
+.cl-delete:hover{color:var(--red-dark);background:#FEF2F2}
+.cl-add-row{margin-top:12px;width:100%;background:transparent;border:2px dashed var(--slate-300);color:var(--slate-500);padding:14px;border-radius:10px;font-family:var(--font-display);font-weight:700;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 120ms ease}
+.cl-add-row:hover{border-color:var(--blue-dark);color:var(--blue-dark);background:rgba(39,46,114,0.04)}
+
+/* === Roadmap === */
+.cl-roadmap{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;position:relative}
+.cl-roadmap::before{content:"";position:absolute;top:32px;left:32px;right:32px;height:2px;background:var(--brand-gradient);opacity:0.3;border-radius:2px;z-index:0}
+.cl-phase{position:relative;z-index:1;background:#fff;border:1px solid var(--slate-200);border-radius:12px;padding:20px 16px 18px;display:flex;flex-direction:column;gap:6px;transition:transform 120ms ease,box-shadow 120ms ease}
+.cl-phase:hover{transform:translateY(-2px);box-shadow:var(--shadow-card)}
+.cl-phase-dot{width:24px;height:24px;border-radius:50%;background:var(--slate-300);border:4px solid #fff;box-shadow:0 0 0 2px var(--slate-300);margin-bottom:6px}
+.cl-phase[data-state="done"] .cl-phase-dot{background:var(--blue-dark);box-shadow:0 0 0 2px var(--blue-dark)}
+.cl-phase[data-state="active"] .cl-phase-dot{background:var(--red-dark);box-shadow:0 0 0 2px var(--red-dark)}
+.cl-phase[data-state="planned"] .cl-phase-dot{background:#fff;border-color:var(--slate-400);box-shadow:0 0 0 2px var(--slate-300)}
+.cl-phase-name{font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--slate-500);outline:none;border-radius:4px;padding:1px 3px;margin-left:-3px}
+.cl-phase-name:focus,.cl-phase-name:hover{background:var(--slate-50)}
+.cl-phase-title{font-family:var(--font-display);font-weight:700;font-size:15px;line-height:1.2;color:var(--ink);outline:none;border-radius:4px;padding:2px 4px;margin-left:-4px}
+.cl-phase-title:focus,.cl-phase-title:hover{background:var(--slate-50)}
+.cl-phase-detail{font-size:12px;color:var(--slate-500);line-height:1.4;outline:none;border-radius:4px;padding:2px 4px;margin-left:-4px}
+.cl-phase-detail:focus,.cl-phase-detail:hover{background:var(--slate-50)}
+.cl-phase-state{margin-top:auto;padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:11px;font-family:var(--font-display);font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+.cl-phase[data-state="done"] .cl-phase-state{color:var(--blue-dark)}
+.cl-phase[data-state="active"] .cl-phase-state{color:var(--red-dark)}
+.cl-phase[data-state="planned"] .cl-phase-state{color:var(--slate-500)}
+.cl-phase-select{font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid var(--slate-200);border-radius:6px;padding:4px 8px;background:#fff;color:var(--ink)}
+
+/* === Progress overall bar === */
+.cl-progress-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:8px}
+.cl-progress-stat{background:var(--slate-50);border-radius:10px;padding:18px;text-align:center}
+.cl-progress-stat-label{font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red-dark);margin-bottom:4px}
+.cl-progress-stat-value{font-family:var(--font-display);font-weight:700;font-size:36px;line-height:1;color:var(--blue-dark);letter-spacing:0.02em}
+.cl-progress-stat-sub{font-size:12px;color:var(--slate-500);margin-top:4px}
+
+/* === Footer === */
+footer{background:var(--ink);color:#fff;padding:80px 48px 40px;clip-path:var(--peak-clip-up);margin-top:60px}
+.cl-footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.cl-footer-text{font-size:12px;color:#fff;opacity:0.65;font-family:var(--font-body)}
+.cl-footer-text strong{font-family:var(--font-display);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.95}
+
+/* === Editable affordance === */
+[contenteditable="true"]:empty::before{content:attr(data-placeholder);color:var(--slate-400);font-style:italic}
+[contenteditable="true"]:focus{outline:none}
+
+/* === Hidden file input for import === */
+.cl-file-input{display:none}
+
+/* === Toast === */
+.cl-toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:12px 20px;border-radius:8px;font-family:var(--font-display);font-weight:700;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;box-shadow:0 12px 28px rgba(0,0,0,0.3);opacity:0;transform:translateY(8px);transition:all 200ms ease;pointer-events:none;z-index:100}
+.cl-toast.show{opacity:1;transform:translateY(0)}
+
+/* === Responsive === */
+@media (max-width:900px){
+  .cl-header{padding:28px 24px 80px}
+  .cl-toolbar{padding:0 24px;margin-top:-60px}
+  main{padding:0 24px 60px}
+  .cl-title{font-size:32px}
+  .cl-section{padding:24px 20px}
+  .cl-priority-row{grid-template-columns:36px 1fr 90px 36px;grid-template-rows:auto auto;gap:8px}
+  .cl-priority-row .cl-owner-input,.cl-priority-row .cl-progress-input{grid-column:span 2}
+  .cl-roadmap{grid-template-columns:1fr}
+  .cl-roadmap::before{display:none}
+  .cl-progress-summary{grid-template-columns:repeat(2,1fr)}
+  footer{padding:60px 24px 32px}
+}
+
+@media print{
+  .cl-toolbar,.cl-add-row,.cl-delete{display:none}
+  .cl-header{clip-path:none;padding-bottom:24px}
+  footer{clip-path:none;padding-top:24px}
+  body{background:#fff}
+  .cl-section{box-shadow:none;border:1px solid var(--slate-200);page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="cl-header">
+  <div class="cl-header-inner">
+    <div class="cl-header-text">
+      <div class="cl-eyebrow">Canyon Labs · Data, AI & Digital</div>
+      <h1 class="cl-title">Project Pipeline</h1>
+      <p class="cl-subtitle">Where we are, where we're headed, and what needs the executive team's attention this cycle.</p>
+    </div>
+    <svg class="cl-mark" viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" aria-label="Canyon Labs mark">
+      <defs>
+        <linearGradient id="pk" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFFFFF"/>
+          <stop offset="35%" stop-color="#FFE6E6"/>
+          <stop offset="70%" stop-color="#FFD0D0"/>
+          <stop offset="100%" stop-color="#FFFFFF"/>
+        </linearGradient>
+      </defs>
+      <g fill="url(#pk)">
+        <path d="M50 100 L90 25 L130 100 Z"/>
+        <path d="M70 100 L90 55 L110 100 Z" fill="rgba(0,0,0,0.18)"/>
+        <path d="M115 100 L165 15 L215 100 Z"/>
+        <path d="M140 100 L165 45 L190 100 Z" fill="rgba(0,0,0,0.18)"/>
+        <path d="M200 100 L240 25 L280 100 Z"/>
+        <path d="M220 100 L240 55 L260 100 Z" fill="rgba(0,0,0,0.18)"/>
+      </g>
+    </svg>
+  </div>
+</header>
+
+<div class="cl-toolbar">
+  <button class="cl-btn cl-btn-primary" onclick="exportJSON()">Export →</button>
+  <button class="cl-btn cl-btn-ghost" onclick="document.getElementById('importFile').click()">Import</button>
+  <button class="cl-btn cl-btn-ghost" onclick="window.print()">Print</button>
+  <button class="cl-btn cl-btn-ghost" onclick="resetData()">Reset</button>
+  <input type="file" id="importFile" class="cl-file-input" accept=".json" onchange="importJSON(event)">
+  <span class="cl-toolbar-spacer"></span>
+  <span class="cl-meeting-meta">Last updated: <strong id="lastUpdated">—</strong></span>
+</div>
+
+<main>
+  <!-- ========== PROGRESS SUMMARY ========== -->
+  <section class="cl-section">
+    <div class="cl-section-header">
+      <div>
+        <div class="cl-section-eyebrow">Snapshot</div>
+        <h2 class="cl-section-title">Where we stand</h2>
+      </div>
+    </div>
+    <div class="cl-progress-summary">
+      <div class="cl-progress-stat">
+        <div class="cl-progress-stat-label">Active</div>
+        <div class="cl-progress-stat-value" id="statActive">0</div>
+        <div class="cl-progress-stat-sub">priorities in flight</div>
+      </div>
+      <div class="cl-progress-stat">
+        <div class="cl-progress-stat-label">Avg progress</div>
+        <div class="cl-progress-stat-value" id="statProgress">0%</div>
+        <div class="cl-progress-stat-sub">across active work</div>
+      </div>
+      <div class="cl-progress-stat">
+        <div class="cl-progress-stat-label">At risk</div>
+        <div class="cl-progress-stat-value" id="statRisk">0</div>
+        <div class="cl-progress-stat-sub">need exec attention</div>
+      </div>
+      <div class="cl-progress-stat">
+        <div class="cl-progress-stat-label">Phase</div>
+        <div class="cl-progress-stat-value" id="statPhase" style="font-size:22px;line-height:1.1">—</div>
+        <div class="cl-progress-stat-sub">current Canyon Connect step</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRIORITY LIST ========== -->
+  <section class="cl-section">
+    <div class="cl-section-header">
+      <div>
+        <div class="cl-section-eyebrow">Priorities</div>
+        <h2 class="cl-section-title">Top initiatives</h2>
+        <p class="cl-section-sub">Ranked highest to lowest. Drag the number to reorder. Click any field to edit.</p>
+      </div>
+    </div>
+    <div id="priorityList"></div>
+    <button class="cl-add-row" onclick="addPriority()">+ Add priority</button>
+  </section>
+
+  <!-- ========== ROADMAP ========== -->
+  <section class="cl-section">
+    <div class="cl-section-header">
+      <div>
+        <div class="cl-section-eyebrow">Long Game</div>
+        <h2 class="cl-section-title">Roadmap to Canyon Connect</h2>
+        <p class="cl-section-sub">The path from where we are today to fully automated quote→test→invoice. Click any phase to edit.</p>
+      </div>
+    </div>
+    <div class="cl-roadmap" id="roadmap"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="cl-footer-inner">
+    <div class="cl-footer-text">
+      <strong>Canyon Labs · Data, AI & Digital</strong><br>
+      © 2026 Ultradent Products, Inc. All rights reserved. Canyon Labs™ is a trademark of Ultradent Products, Inc.
+    </div>
+    <div class="cl-footer-text" style="text-align:right">
+      Internal — for executive review.<br>
+      Data persists in your browser. Export to share.
+    </div>
+  </div>
+</footer>
+
+<div class="cl-toast" id="toast"></div>
+
+<script>
+// ============== DATA MODEL ==============
+const STORAGE_KEY = 'canyonLabsDataAIDigitalPM_v1';
+
+const DEFAULT_DATA = {
+  priorities: [
+    {
+      name: 'LabVantage connector unblock',
+      desc: 'ODBC vs API path decision; cost question to vendor; pulls test completions into pipeline.',
+      status: 'blocked',
+      owner: 'Jason / Clint',
+      progress: 30
+    },
+    {
+      name: 'QuickBooks integration decision',
+      desc: 'Desktop vs Online — Finance call. Drives the writeback half of the billing pipeline.',
+      status: 'blocked',
+      owner: 'Brittany / Clint',
+      progress: 15
+    },
+    {
+      name: 'product_test_mapping populated',
+      desc: 'Crosswalk between Salesforce product codes and LabVantage test codes — required for any per-unit billing.',
+      status: 'on-track',
+      owner: 'Clint',
+      progress: 40
+    },
+    {
+      name: 'Exec prioritization cadence stood up',
+      desc: 'This tool. Monthly exec review on priorities, blockers, progress against Canyon Connect.',
+      status: 'on-track',
+      owner: 'Clint',
+      progress: 70
+    },
+    {
+      name: 'Salesforce CPQ data layer hardened',
+      desc: 'Sf_quotes / sf_quote_lines refresh cadence; net price field correctness; per-unit vs per-project flagging.',
+      status: 'on-track',
+      owner: 'Clint',
+      progress: 60
+    }
+  ],
+  roadmap: [
+    { name: 'Phase 1', title: 'Foundation', detail: 'Salesforce + Supabase + GitHub repo live. ETL host (cl-odw) provisioned.', state: 'done' },
+    { name: 'Phase 2', title: 'LabVantage integration', detail: 'Connector live; test completions pulled into pipeline_state.', state: 'active' },
+    { name: 'Phase 3', title: 'Pricing engine', detail: 'product_test_mapping + per-unit / per-project / T&M classification logic.', state: 'planned' },
+    { name: 'Phase 4', title: 'QuickBooks writeback', detail: 'Approved invoices pushed; Teams approval gate in front.', state: 'planned' },
+    { name: 'Phase 5', title: 'Production cutover', detail: 'Manual reconciliation retired. Brittany off the daily-MSA hot seat.', state: 'planned' }
+  ]
+};
+
+let data = load();
+
+// ============== STORAGE ==============
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    document.getElementById('lastUpdated').textContent = new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+  } catch (e) {
+    toast('Save failed');
+  }
+}
+
+function resetData() {
+  if (!confirm('Reset to default data? Your edits will be lost.')) return;
+  data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  save();
+  render();
+  toast('Reset to defaults');
+}
+
+// ============== EXPORT / IMPORT ==============
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'canyon-labs-pm-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Exported');
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed.priorities || !parsed.roadmap) throw new Error('Invalid format');
+      data = parsed;
+      save();
+      render();
+      toast('Imported');
+    } catch (err) {
+      toast('Import failed — bad JSON');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ============== RENDER ==============
+function render() {
+  renderPriorities();
+  renderRoadmap();
+  renderStats();
+}
+
+function renderPriorities() {
+  const container = document.getElementById('priorityList');
+  container.innerHTML = '';
+  data.priorities.forEach((p, idx) => {
+    const row = document.createElement('div');
+    row.className = 'cl-priority-row';
+    row.draggable = true;
+    row.dataset.index = idx;
+    row.innerHTML = `
+      <div class="cl-priority-rank" title="Drag to reorder">${idx + 1}</div>
+      <div class="cl-priority-text">
+        <div class="cl-priority-name" contenteditable="true" data-placeholder="Priority name…">${escapeHtml(p.name)}</div>
+        <div class="cl-priority-desc" contenteditable="true" data-placeholder="One-line description…">${escapeHtml(p.desc)}</div>
+      </div>
+      <select class="cl-status-select" data-status="${p.status}">
+        <option value="on-track" ${p.status==='on-track'?'selected':''}>On track</option>
+        <option value="at-risk" ${p.status==='at-risk'?'selected':''}>At risk</option>
+        <option value="blocked" ${p.status==='blocked'?'selected':''}>Blocked</option>
+        <option value="done" ${p.status==='done'?'selected':''}>Done</option>
+        <option value="planned" ${p.status==='planned'?'selected':''}>Planned</option>
+      </select>
+      <input class="cl-owner-input" type="text" value="${escapeHtml(p.owner)}" placeholder="Owner">
+      <input class="cl-progress-input" type="number" min="0" max="100" value="${p.progress}" placeholder="%">
+      <button class="cl-delete" title="Delete">×</button>
+    `;
+
+    // Wire events
+    const nameEl = row.querySelector('.cl-priority-name');
+    const descEl = row.querySelector('.cl-priority-desc');
+    const statusEl = row.querySelector('.cl-status-select');
+    const ownerEl = row.querySelector('.cl-owner-input');
+    const progEl = row.querySelector('.cl-progress-input');
+    const delEl = row.querySelector('.cl-delete');
+
+    nameEl.addEventListener('blur', () => { data.priorities[idx].name = nameEl.textContent.trim(); save(); });
+    descEl.addEventListener('blur', () => { data.priorities[idx].desc = descEl.textContent.trim(); save(); });
+    statusEl.addEventListener('change', () => {
+      data.priorities[idx].status = statusEl.value;
+      statusEl.dataset.status = statusEl.value;
+      save();
+      renderStats();
+    });
+    ownerEl.addEventListener('blur', () => { data.priorities[idx].owner = ownerEl.value.trim(); save(); });
+    progEl.addEventListener('blur', () => {
+      const v = Math.max(0, Math.min(100, parseInt(progEl.value || '0', 10)));
+      data.priorities[idx].progress = v;
+      progEl.value = v;
+      save();
+      renderStats();
+    });
+    delEl.addEventListener('click', () => {
+      if (confirm(`Delete "${data.priorities[idx].name}"?`)) {
+        data.priorities.splice(idx, 1);
+        save();
+        render();
+      }
+    });
+
+    // Drag-to-reorder
+    row.addEventListener('dragstart', e => {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', String(idx));
+      row.style.opacity = '0.4';
+    });
+    row.addEventListener('dragend', () => { row.style.opacity = ''; });
+    row.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    row.addEventListener('drop', e => {
+      e.preventDefault();
+      const from = parseInt(e.dataTransfer.getData('text/plain'), 10);
+      const to = idx;
+      if (from === to) return;
+      const [moved] = data.priorities.splice(from, 1);
+      data.priorities.splice(to, 0, moved);
+      save();
+      render();
+    });
+
+    container.appendChild(row);
+  });
+}
+
+function renderRoadmap() {
+  const container = document.getElementById('roadmap');
+  container.innerHTML = '';
+  data.roadmap.forEach((r, idx) => {
+    const phase = document.createElement('div');
+    phase.className = 'cl-phase';
+    phase.dataset.state = r.state;
+    phase.innerHTML = `
+      <div class="cl-phase-dot"></div>
+      <div class="cl-phase-name" contenteditable="true" data-placeholder="Phase…">${escapeHtml(r.name)}</div>
+      <div class="cl-phase-title" contenteditable="true" data-placeholder="What ships…">${escapeHtml(r.title)}</div>
+      <div class="cl-phase-detail" contenteditable="true" data-placeholder="One sentence…">${escapeHtml(r.detail)}</div>
+      <div class="cl-phase-state">
+        <select class="cl-phase-select">
+          <option value="planned" ${r.state==='planned'?'selected':''}>Planned</option>
+          <option value="active" ${r.state==='active'?'selected':''}>Active</option>
+          <option value="done" ${r.state==='done'?'selected':''}>Done</option>
+        </select>
+      </div>
+    `;
+
+    const nameEl = phase.querySelector('.cl-phase-name');
+    const titleEl = phase.querySelector('.cl-phase-title');
+    const detailEl = phase.querySelector('.cl-phase-detail');
+    const stateEl = phase.querySelector('.cl-phase-select');
+
+    nameEl.addEventListener('blur', () => { data.roadmap[idx].name = nameEl.textContent.trim(); save(); });
+    titleEl.addEventListener('blur', () => { data.roadmap[idx].title = titleEl.textContent.trim(); save(); });
+    detailEl.addEventListener('blur', () => { data.roadmap[idx].detail = detailEl.textContent.trim(); save(); });
+    stateEl.addEventListener('change', () => {
+      data.roadmap[idx].state = stateEl.value;
+      phase.dataset.state = stateEl.value;
+      save();
+      renderStats();
+    });
+
+    container.appendChild(phase);
+  });
+}
+
+function renderStats() {
+  const active = data.priorities.filter(p => p.status === 'on-track' || p.status === 'at-risk' || p.status === 'blocked').length;
+  const activeWithProgress = data.priorities.filter(p => p.status !== 'done' && p.status !== 'planned');
+  const avgProgress = activeWithProgress.length
+    ? Math.round(activeWithProgress.reduce((sum, p) => sum + (p.progress || 0), 0) / activeWithProgress.length)
+    : 0;
+  const atRisk = data.priorities.filter(p => p.status === 'blocked' || p.status === 'at-risk').length;
+  const currentPhase = data.roadmap.find(r => r.state === 'active');
+
+  document.getElementById('statActive').textContent = active;
+  document.getElementById('statProgress').textContent = avgProgress + '%';
+  document.getElementById('statRisk').textContent = atRisk;
+  document.getElementById('statPhase').textContent = currentPhase ? currentPhase.title : '—';
+}
+
+// ============== ADD ==============
+function addPriority() {
+  data.priorities.push({
+    name: 'New priority',
+    desc: 'Click to add description.',
+    status: 'planned',
+    owner: '',
+    progress: 0
+  });
+  save();
+  render();
+  // Focus the new row's name field
+  setTimeout(() => {
+    const rows = document.querySelectorAll('.cl-priority-row');
+    const last = rows[rows.length - 1];
+    if (last) {
+      const nameEl = last.querySelector('.cl-priority-name');
+      nameEl.focus();
+      const range = document.createRange();
+      range.selectNodeContents(nameEl);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  }, 50);
+}
+
+// ============== UTIL ==============
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ============== INIT ==============
+render();
+save();
+</script>
+
+</body>
+</html>

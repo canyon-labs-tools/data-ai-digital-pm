@@ -1,0 +1,23 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+
+# Local exports / one-off JSON dumps
+exports/
+*.export.json
+
+# Node / build artifacts (none expected, but defensive)
+node_modules/
+dist/
+build/
+.cache/
+.parcel-cache/
