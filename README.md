@@ -41,4 +41,4 @@ Default initiatives and roadmap phases live in the `DEFAULT_DATA` constant at th
 
 ## License
 
-Internal Canyon Labs use. Canyon Labs™ is a trademark of Ultradent Products, Inc.
+Internal Canyon Labs use. © Canyon Labs. All rights reserved.
