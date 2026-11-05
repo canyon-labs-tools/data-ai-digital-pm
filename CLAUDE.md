@@ -46,7 +46,7 @@ To change defaults shipped to all users, edit `DEFAULT_DATA` in `index.html` and
 
 - **Every keystroke saves.** No save button. No spinner. Toast confirms exports/imports.
 - **Print stylesheet** strips toolbar / add / delete chrome. Use Cmd-P to make a clean handout for an exec meeting.
-- **localStorage is per-browser per-machine.** If the data needs to live in multiple places, the workflow is Export → commit JSON to this repo or a shared location → Import on the other machine.
+- **localStorage is per-browser per-machine.** Use this workflow for any data that needs to live in multiple places: Export → commit JSON to this repo or a shared location → Import on the other machine.
 - **No tests** — single-file static HTML, no build step.
 
 ### Future work parked here
